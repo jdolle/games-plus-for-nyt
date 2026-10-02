@@ -4,3 +4,10 @@ dist/
 .DS_Store
 dist-prod/
 *.zip
+
+# Credentials never belong in the repository (the Chrome Web Store service account key lives in a GitHub secret)
+*.pem
+*.p12
+*key.json
+.env
+.env.*
