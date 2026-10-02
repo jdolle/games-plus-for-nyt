@@ -28,7 +28,15 @@ break the user's hot reload (the build refuses this; use `NYTE_OUT=dist-prod pnp
 side build, and `NYTE_OUT=… NYTE_DEV_PORT=… node build.mjs --watch` for an isolated dev server).
 `pnpm dev` (watch + hot reload: load `dist/` once via chrome://extensions → Load unpacked; every
 save then reloads the extension and refreshes open game tabs), `pnpm build`, `pnpm check`
-(typecheck + lint + tests).
+(typecheck + lint + tests). `.github/workflows/ci.yml` runs `pnpm check` + `pnpm build` on pushes and PRs.
+
+Releasing: the version is hand-written in `manifest.json` and mirrored in `package.json`
+(`src/manifest.test.ts` keeps them equal). Pushing a tag `v<version>` runs
+`.github/workflows/release.yml`: check, build, zip → a GitHub Release with the zip, and an upload to
+the Chrome Web Store submitted for review through `scripts/publish-chrome.mjs` (dependency-free client
+for the v2 API; the user wants store logic in that script, not in workflow bash). The first store
+publish is manual; the workflow needs the secret `CWS_SERVICE_ACCOUNT_KEY` and the variables
+`CWS_PUBLISHER_ID` / `CWS_EXTENSION_ID`. Routine and setup: `docs/RELEASING.md`.
 
 ## Rules
 - Selectors live only in a game's `selectors.ts`, as ordered fallback lists. Ids, `data-testid`,

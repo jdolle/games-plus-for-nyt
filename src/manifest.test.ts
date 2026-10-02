@@ -11,6 +11,7 @@ interface ContentScript {
 }
 interface Manifest {
   name: string;
+  version: string;
   description: string;
   icons?: Record<string, string>;
   action?: { default_icon?: Record<string, string> };
@@ -53,6 +54,14 @@ describe("manifest.json agrees with the game registry", () => {
     expect(brand!.toLowerCase()).not.toMatch(/nyt|new york times|wordle|spelling bee|connections|crossword/);
     expect(manifest.description).toContain(DISCLAIMER);
     expect(manifest.description.length).toBeLessThanOrEqual(132); // Chrome's manifest description limit
+  });
+
+  it("carries the same version as package.json, in Chrome's dotted-integer form", () => {
+    // A release is the tag v<manifest version> (.github/workflows/release.yml); keeping package.json equal
+    // means one bump before tagging. See docs/RELEASING.md.
+    const pkg = JSON.parse(readFileSync(new URL("../package.json", import.meta.url), "utf8")) as { version: string };
+    expect(manifest.version).toBe(pkg.version);
+    expect(manifest.version).toMatch(/^\d+(\.\d+){0,3}$/);
   });
 
   it("ships its own icon at the sizes Chrome and the Web Store use", () => {

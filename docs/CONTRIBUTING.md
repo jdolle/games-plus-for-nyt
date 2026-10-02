@@ -10,7 +10,7 @@ pnpm dev          # builds dist/, watches src/, hot-reloads the extension
 Then once: `chrome://extensions` → *Developer mode* → *Load unpacked* → pick `dist/`. Every save
 rebuilds, reloads the extension and refreshes the open NYT game tabs. `pnpm build` makes a
 production build; `pnpm check` runs typecheck, lint and tests. Hot-reload troubleshooting and
-console logging: [DEBUGGING.md](DEBUGGING.md).
+console logging: [DEBUGGING.md](DEBUGGING.md). Publishing a version: [RELEASING.md](RELEASING.md).
 
 ## Repository
 
@@ -24,7 +24,9 @@ src/pages/<id>/      non-game pages: crossword home and archive dark mode, the u
 src/icons/           the extension icon (PNG + SVG source), regenerated with `pnpm icons`
 src/popup/           the extension dropdown
 src/styles/theme.css shared dark tokens and NYT shell styling
-docs/                CONTRIBUTING.md, LEGAL.md, DEBUGGING.md
+scripts/             licence check, icon generation, the Chrome Web Store upload used by the Release workflow
+.github/workflows/   CI (check + build on pushes and pull requests) and Release (tag → GitHub Release + Chrome Web Store)
+docs/                CONTRIBUTING.md, RELEASING.md, LEGAL.md, DEBUGGING.md
 ```
 
 [`AGENTS.md`](../AGENTS.md) in the repository root holds the detailed rules of the codebase (it stays

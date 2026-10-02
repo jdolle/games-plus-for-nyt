@@ -5,6 +5,7 @@
   "description": "Unofficial dark mode and keyboard shortcuts for NYT Games. Not affiliated with or endorsed by The New York Times.",
   "license": "MIT",
   "type": "module",
+  "packageManager": "pnpm@11.20.0",
   "scripts": {
     "dev": "node build.mjs --watch",
     "build": "node build.mjs",

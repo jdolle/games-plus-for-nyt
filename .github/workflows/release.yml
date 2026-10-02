@@ -1,0 +1,83 @@
+# Pushing a tag v<version> (the version in manifest.json) builds the extension, attaches the zip to a
+# GitHub Release and uploads it to the Chrome Web Store, where it is submitted for review
+# (scripts/publish-chrome.mjs). Setup and the release routine: docs/RELEASING.md.
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      zip: ${{ steps.version.outputs.zip }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6 # pnpm version: "packageManager" in package.json
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm check
+      - name: Check that the tag matches the manifest version
+        id: version
+        run: |
+          version=$(node -p "require('./manifest.json').version")
+          if [ "v$version" != "$GITHUB_REF_NAME" ]; then
+            echo "::error::tag $GITHUB_REF_NAME does not match manifest.json version $version (set the version, commit, then tag v$version)"
+            exit 1
+          fi
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "zip=games-plus-for-nyt-$version.zip" >> "$GITHUB_OUTPUT"
+      - run: pnpm build
+      - name: Zip the build (manifest.json at the root of the archive)
+        env:
+          ZIP: ${{ steps.version.outputs.zip }}
+        run: cd dist && zip -r "../$ZIP" .
+      - uses: actions/upload-artifact@v7
+        with:
+          name: extension-zip
+          path: ${{ steps.version.outputs.zip }}
+          if-no-files-found: error
+
+  github-release:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          name: extension-zip
+      - name: Create the GitHub Release with the zip attached
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          ZIP: ${{ needs.build.outputs.zip }}
+          VERSION: ${{ needs.build.outputs.version }}
+        run: gh release create "$GITHUB_REF_NAME" "$ZIP" --title "Games Plus for NYT v$VERSION" --generate-notes
+
+  chrome-web-store:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      - uses: actions/download-artifact@v8
+        with:
+          name: extension-zip
+      - name: Upload to the Chrome Web Store and submit for review
+        env:
+          CWS_SERVICE_ACCOUNT_KEY: ${{ secrets.CWS_SERVICE_ACCOUNT_KEY }}
+          CWS_PUBLISHER_ID: ${{ vars.CWS_PUBLISHER_ID }}
+          CWS_EXTENSION_ID: ${{ vars.CWS_EXTENSION_ID }}
+          ZIP: ${{ needs.build.outputs.zip }}
+        run: node scripts/publish-chrome.mjs "$ZIP"
