@@ -23,9 +23,7 @@ export interface ShortcutsEditorOptions {
   scopes?: readonly ShortcutScope[];
 }
 
-const DEFAULT_HINT =
-  "Click a key, then press the new keys (a modifier such as Shift may be used on its own); Backspace unbinds it, Esc cancels. " +
-  "Letters on their own can't be bound; a key already in use moves to the row you bind it to. For the game's own keys, rebinding stops the original key working here; pressing the original key resets it.";
+const DEFAULT_HINT = "Click a key to rebind. Press Backspace to unbind.";
 
 /**
  * Binding table: one row per shortcut (or native control) with its title, an optional description,

@@ -72,7 +72,8 @@ handled before the browser sees the key.
 | `content_scripts[].matches` | `https://www.nytimes.com/crosswords/game/*`, `/games/connections*`, `/puzzles/spelling-bee*`, `/games/wordle/*`, `/crosswords` (home, with or without a trailing slash or query string), `/crosswords/archive*`, `/subscription/games-offer*` | the game pages, the crossword home and archive pages and the upgrade-offer page only |
 
 No `host_permissions`, `tabs`, `activeTab`, `scripting` or wildcard hosts; the only install warning
-is "Read and change your data on www.nytimes.com".
+is "Read and change your data on www.nytimes.com". The extension collects and sends no data:
+[privacy policy](docs/PRIVACY.md).
 
 ## Contributing
 

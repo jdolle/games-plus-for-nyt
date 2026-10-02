@@ -36,6 +36,35 @@ being through the Developer Dashboard. Everything after that is automated.
    It prints the published and submitted versions with their states. An error here means a wrong
    id, a key that is not a service account key, or a service account not yet added to the publisher.
 
+## Store screenshots
+
+The listing's screenshots are the 1280x800 PNGs in `assets/` (`crossword-daily.png`,
+`crossword-mini.png`, `spelling-bee.png`, `connections.png`, `wordle.png`), captured on the real
+game pages with a production build of the extension. Refresh them before a major release; they
+need macOS (`sips` does the resizing) and the Playwright Chromium (`pnpm exec playwright install
+chromium` once).
+
+- `pnpm screenshots` captures Spelling Bee, Connections and Wordle headlessly, no account needed.
+  Pass `--bee-words=WORD,WORD` with a couple of today's Spelling Bee answers so its found-words
+  list is not empty.
+- `pnpm screenshots:crosswords` captures The Mini and the daily crossword, which need a Games
+  subscription. It opens a Chrome for Testing window on The Mini: log in there yourself (NYT's
+  login page rejects automated browsers, so nothing is attached while you do), and the script
+  takes over once the board shows. It does not type into your puzzles, but dismissing the Play
+  screen starts their timers. On success it closes the window and deletes the throwaway profile;
+  if something goes wrong the window stays open and `--attach` re-runs the capture without a new
+  login.
+- The 640x400 small promo tile (`crosswords-640x400.png`) is a crop of the daily frame; for
+  example `sips --cropOffset 0 0 -c 700 1120 assets/crossword-daily.png --out /tmp/tile.png &&
+  sips -z 400 640 /tmp/tile.png --out assets/crosswords-640x400.png`.
+
+The frames show what the extension does: dark mode and fullscreen mode on the boards, the
+settings panel open on Connections, and our section inside Wordle's own Settings dialog. Check
+each image before uploading; a page change on nytimes.com usually shows up as a missing
+element or an un-dismissed dialog in the frame. Too many automated page loads in a row make
+nytimes.com answer with a "confirm that you are human" check; the scripts then stop without
+writing anything, and it clears by itself after a while.
+
 ## Releasing a version
 
 1. Set the new version in `manifest.json` and `package.json` (the same value, dotted integers such
