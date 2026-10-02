@@ -1,0 +1,2 @@
+/* Scope every rule under html[data-nyte-theme="dark"]. Never style ad slots. */
+html[data-nyte-theme="dark"] [data-testid="my-game-board"] { background-color: var(--nyte-bg); }

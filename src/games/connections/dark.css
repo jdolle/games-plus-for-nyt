@@ -1,0 +1,9 @@
+/* Connections dark theme. Inert until html[data-nyte-theme="dark"].
+   NYT ships a full dark palette for this game (tiles #cfcfbf, selected #656458, dark text) that
+   core/theme.ts activates through body[data-mode="dark"].display-settings-enabled, so only residue
+   that a DevTools pass shows still light belongs here.
+   Never style ad slots: [data-testid="ad-top"], [data-testid="ad-bottom"], [id^="dfp-ad"], .ad */
+html[data-nyte-theme="dark"] #connections-container {
+  background-color: var(--nyte-bg);
+  color: var(--nyte-text);
+}

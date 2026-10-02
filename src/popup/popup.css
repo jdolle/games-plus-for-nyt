@@ -1,0 +1,11 @@
+/* Popup-only layout; component styles come from core/ui/styles.ts. */
+html, body { margin: 0; }
+body { width: 360px; max-height: 580px; overflow-y: auto; background: #ffffff; }
+@media (prefers-color-scheme: dark) { body { background: #121213; } }
+#app { padding: 14px 16px 16px; }
+details.nyte-section > summary { cursor: pointer; font-weight: 700; list-style: revert; }
+details.nyte-section > summary .nyte-tag { margin-left: 6px; }
+/* The inline shortcut editor is itself a .nyte-section; no second rule/padding inside a game's details. */
+details.nyte-section .nyte-section { border-top: 0; padding-bottom: 0; }
+.nyte-popup-hint { margin: 6px 0 0; }
+.nyte-disclaimer { margin: -4px 0 0; padding-bottom: 12px; font-size: 12px; font-style: italic; font-weight: 400; color: var(--muted); }

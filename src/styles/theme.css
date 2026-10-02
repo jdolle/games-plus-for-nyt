@@ -1,0 +1,257 @@
+/* Games Plus for NYT shared dark theme — injected on every themed game at document_start but inert until
+   core/theme.ts sets html[data-nyte-theme="dark"]. Tokens mirror Wordle's palette.
+
+   NYT's own token stylesheet already defines a dark palette under
+   body[data-mode="dark"].display-settings-enabled (which core/theme.ts also sets); the overrides
+   below pin its page/moment/modal/text tokens to ours. Specificity must beat NYT's (0,2,0) rule.
+
+   AD SLOTS ARE NEVER STYLED, HIDDEN OR MOVED (NYT ToS §4.1(7)):
+   [data-testid="ad-top"], [data-testid="ad-bottom"], [id^="dfp-ad"], .ad
+   Keep every selector targeted; no broad `div { background }` rules. */
+
+html[data-nyte-theme="dark"] {
+  color-scheme: dark;
+  background-color: #121213 !important;
+  --nyte-bg: #121213;
+  --nyte-surface: #1a1a1b;
+  --nyte-surface-2: #272729;
+  --nyte-border: #3a3a3c;
+  --nyte-text: #d7dadc;
+  --nyte-text-muted: #818384;
+  --nyte-green: #538d4e;
+  --nyte-yellow: #b59f3b;
+}
+
+html[data-nyte-theme="dark"] body,
+html[data-nyte-theme="dark"] body[data-mode="dark"] {
+  --bg-page: var(--nyte-bg);
+  --bg-moment: var(--nyte-bg);
+  --bg-modal: var(--nyte-surface);
+  --bg-dropdown: var(--nyte-surface);
+  --bg-toolbar-selected: var(--nyte-border);
+  --text: var(--nyte-text);
+  background-color: var(--nyte-bg) !important;
+  color: var(--nyte-text);
+}
+
+/* Shared game shell */
+html[data-nyte-theme="dark"] .pz-game-field,
+html[data-nyte-theme="dark"] .pz-game-screen,
+html[data-nyte-theme="dark"] .pz-moment,
+html[data-nyte-theme="dark"] #js-hook-pz-moment__game,
+html[data-nyte-theme="dark"] .pz-footer {
+  background-color: var(--nyte-bg);
+  color: var(--nyte-text);
+}
+html[data-nyte-theme="dark"] .pz-footer__legal-link + ::before { color: var(--nyte-text-muted); }
+
+/* Welcome screen (.pz-moment__welcome: "Spelling Bee — How many words can you make with 7 letters?",
+   and its Connections counterpart). NYT keeps its text "constant" dark (`.pz-moment__welcome *`) because
+   the moment normally sits on the game's brand colour; on our dark moment background that text would be
+   black on black, so make it light and give the buttons dark-mode colours. */
+html[data-nyte-theme="dark"] .pz-moment__welcome,
+html[data-nyte-theme="dark"] .pz-moment__welcome * { color: var(--nyte-text); }
+html[data-nyte-theme="dark"] .pz-moment__welcome .pz-moment__button.primary,
+html[data-nyte-theme="dark"] .pz-moment__welcome .pz-moment__button.constant {
+  background: var(--nyte-text);
+  color: var(--nyte-bg);
+  border-color: var(--nyte-text);
+}
+html[data-nyte-theme="dark"] .pz-moment__welcome .pz-moment__button.secondary {
+  background: transparent;
+  color: var(--nyte-text);
+  border-color: var(--nyte-text);
+}
+
+/* Everything NYT renders after the game (#portal-editorial-content: editorial cards, promos,
+   "more games") is designed for the light page and hard-codes dark text (#000, #333, #6f6f6f)
+   and white card backgrounds, so on a dark page parts of it vanish. Rather than chase every
+   component class, invert that region's colours: an inversion keeps every contrast ratio NYT
+   designed, so nothing can disappear. Images, video, iframes and ad slots are inverted back,
+   which leaves them pixel-identical (ads are never restyled — see docs/LEGAL.md). The region
+   keeps its normal width and flow; this touches colours only. */
+html[data-nyte-theme="dark"] #portal-editorial-content {
+  background-color: #ffffff;
+  color: #121212;
+  color-scheme: light;
+  filter: invert(1) hue-rotate(180deg);
+}
+html[data-nyte-theme="dark"] #portal-editorial-content :is(img, picture, video, canvas, iframe, [data-testid^="ad-"], [id^="dfp-ad"], .ad) {
+  filter: invert(1) hue-rotate(180deg);
+}
+
+html[data-nyte-theme="dark"] .pz-nav,
+html[data-nyte-theme="dark"] .pz-header,
+html[data-nyte-theme="dark"] #js-global-nav {
+  background-color: var(--nyte-surface);
+  color: var(--nyte-text);
+  border-color: var(--nyte-border);
+}
+
+html[data-nyte-theme="dark"] .pz-toolbar-button:hover,
+html[data-nyte-theme="dark"] .pz-nav a:hover {
+  background-color: var(--nyte-surface-2);
+}
+
+/* Game toolbar (Spelling Bee's right-hand group: Yesterday / Stats / Hints text buttons plus the
+   "More" dropdown, and our ⤢ toggle). NYT lays the group out inline with 45px line-height buttons and
+   gives the dropdown button its own rules (hover `#f4f4f4` with BLACK text, open state
+   `--bg-toolbar-selected`, both `!important`), so in dark mode "More" went black on hover and only
+   its open state filled the row. Make every item a stretched flex child with one hover look. */
+html[data-nyte-theme="dark"] .pz-toolbar-right {
+  display: flex;
+  align-items: stretch;
+}
+/* Items may be wrapped (Stats sits in an inline tooltip trigger); wrappers stretch their content, and
+   every button fills its wrapper so all of them share the row's height. */
+html[data-nyte-theme="dark"] .pz-toolbar-right > * {
+  display: flex;
+  align-items: stretch;
+  height: auto;
+}
+html[data-nyte-theme="dark"] .pz-toolbar-right .pz-toolbar-button,
+html[data-nyte-theme="dark"] .pz-toolbar-right .pz-dropdown__button {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  box-sizing: border-box;
+}
+html[data-nyte-theme="dark"] .pz-toolbar-button:hover,
+html[data-nyte-theme="dark"] button.pz-dropdown__button:hover,
+html[data-nyte-theme="dark"] a.pz-dropdown__button:hover {
+  background-color: var(--nyte-surface-2) !important;
+  color: #ffffff;
+}
+html[data-nyte-theme="dark"] .pz-dropdown .pz-dropdown__show {
+  background-color: var(--nyte-border) !important;
+  color: #ffffff;
+}
+html[data-nyte-theme="dark"] .pz-dropdown__arrow { border-top-color: currentColor; }
+html[data-nyte-theme="dark"] .pz-dropdown__arrow.reverse { border-bottom-color: currentColor; }
+html[data-nyte-theme="dark"] .pz-dropdown__list { border-color: var(--nyte-border); }
+html[data-nyte-theme="dark"] .pz-dropdown__menu-item,
+html[data-nyte-theme="dark"] .pz-dropdown__menu-item button,
+html[data-nyte-theme="dark"] .pz-dropdown__menu-item a {
+  background-color: var(--nyte-surface);
+  color: var(--nyte-text);
+  border-bottom-color: var(--nyte-border);
+}
+html[data-nyte-theme="dark"] .pz-dropdown__menu-item:hover,
+html[data-nyte-theme="dark"] .pz-dropdown__menu-item:hover button,
+html[data-nyte-theme="dark"] .pz-dropdown__menu-item:hover a {
+  background-color: var(--nyte-surface-2);
+  color: #ffffff;
+}
+html[data-nyte-theme="dark"] .pz-dropdown__menu-item:active { background-color: var(--nyte-border); }
+
+/* Games logo (#js-logo-nav > svg.pz-nav__logo): black marks on a white <rect>. Invert the marks to
+   white and drop the white plate so the logo sits directly on the dark nav bar. */
+html[data-nyte-theme="dark"] #js-logo-nav .pz-nav__logo { filter: invert(1); }
+html[data-nyte-theme="dark"] #js-logo-nav .pz-nav__logo > rect[fill="white"] { fill: transparent; }
+
+/* Navigation menu button (#js-nav-burger, aria-label "Navigation menu button").
+   NYT draws it as three black bars: .pz-nav__hamburger-inner plus its ::before/::after
+   (background-color #000), hover = opacity .7, focus = a light #e6e6e6 square, and the open
+   state (.pz-nav__hamburger-squeeze.active) only rotates the bars into an X. In dark mode the
+   bars become white in every state; hover/focus/pressed use a dark surface instead of dimming
+   the icon or painting a light square. */
+html[data-nyte-theme="dark"] .pz-nav__hamburger-inner,
+html[data-nyte-theme="dark"] .pz-nav__hamburger-inner::before,
+html[data-nyte-theme="dark"] .pz-nav__hamburger-inner::after,
+html[data-nyte-theme="dark"] .pz-nav__hamburger.active .pz-nav__hamburger-inner,
+html[data-nyte-theme="dark"] .pz-nav__hamburger.active .pz-nav__hamburger-inner::before,
+html[data-nyte-theme="dark"] .pz-nav__hamburger.active .pz-nav__hamburger-inner::after {
+  background-color: #ffffff;
+}
+html[data-nyte-theme="dark"] .pz-nav__hamburger:hover {
+  opacity: 1;
+  background-color: var(--nyte-surface-2);
+}
+html[data-nyte-theme="dark"] .pz-nav__hamburger:focus,
+html[data-nyte-theme="dark"] .pz-nav__hamburger:focus-visible,
+html[data-nyte-theme="dark"] .pz-nav__hamburger:active,
+html[data-nyte-theme="dark"] .pz-nav__hamburger.active {
+  background-color: var(--nyte-surface-2);
+}
+html[data-nyte-theme="dark"] .pz-nav__hamburger:focus-visible {
+  outline: 2px solid var(--nyte-text);
+  outline-offset: -2px;
+}
+
+/* Expandable navigation drawer (#js-nav-drawer, .pz-nav-drawer), opened by the menu button.
+   Every item NYT renders in it (links, the collapsible-row buttons, "+ Expand All") carries the
+   plain marker class `customNavLink`; the rest of their class names are hashed CSS modules, so the
+   item rules below key on `.customNavLink` only (plus `:has(> .customNavLink)` for the row that
+   wraps an item). NYT defaults the list text to #000 and paints hovered items #ebebeb; its own
+   dark variant (#363636) only exists under a `.dark` ancestor we never set. `!important` keeps
+   these ahead of any NYT rule or inline style. */
+html[data-nyte-theme="dark"] .pz-nav-drawer {
+  background-color: var(--nyte-surface);
+  color: var(--nyte-text);
+}
+html[data-nyte-theme="dark"] .pz-nav-drawer ul,
+html[data-nyte-theme="dark"] .pz-nav-drawer li {
+  color: var(--nyte-text);
+}
+html[data-nyte-theme="dark"] .pz-nav-drawer hr { background-color: var(--nyte-border); }
+/* Section labels in the drawer ("News", "New York Times Games"): h3 inside
+   [data-testid="custom-nav-container"], which has no colour rule of its own and so inherits black. */
+html[data-nyte-theme="dark"] [data-testid="custom-nav-container"] h3 { color: var(--nyte-text-muted); }
+
+/* Items at rest: light text, no highlight */
+html[data-nyte-theme="dark"] .customNavLink {
+  color: var(--nyte-text) !important;
+}
+/* Hovered or keyboard-focused item: white text on NYT's own dark hover shade */
+html[data-nyte-theme="dark"] .customNavLink:hover,
+html[data-nyte-theme="dark"] .customNavLink:focus-visible,
+html[data-nyte-theme="dark"] :has(> .customNavLink):hover .customNavLink {
+  color: #ffffff !important;
+}
+html[data-nyte-theme="dark"] .customNavLink:hover,
+html[data-nyte-theme="dark"] .customNavLink:focus-visible,
+html[data-nyte-theme="dark"] :has(> .customNavLink):hover {
+  background-color: #363636 !important;
+}
+/* Rows that wrap an item (the collapsible game rows): drop NYT's light #ebebeb highlight at rest and
+   mark the expanded row with the dark shade instead; the row's button carries aria-expanded. */
+html[data-nyte-theme="dark"] .pz-nav-drawer :has(> .customNavLink) { background-color: transparent; }
+html[data-nyte-theme="dark"] .pz-nav-drawer :has(> .customNavLink[aria-expanded="true"]) { background-color: #363636; }
+/* Legacy drawer links */
+html[data-nyte-theme="dark"] .pz-nav-drawer__link:hover,
+html[data-nyte-theme="dark"] .pz-nav-drawer__link:focus,
+html[data-nyte-theme="dark"] .pz-nav-drawer__link:active,
+html[data-nyte-theme="dark"] .pz-nav-drawer__link.selected {
+  background-color: #363636;
+  color: #ffffff;
+}
+/* Account block pinned to the bottom of the drawer: #js-nav-profile (.pz-nav-drawer__account), a white
+   sticky panel with a black top border holding the "Profile" heading (h4.pz-nav-drawer__heading), the
+   "Account details" link and the .pz-nav__button actions (NYT's filled-black and white/gray variants). */
+html[data-nyte-theme="dark"] #js-nav-profile,
+html[data-nyte-theme="dark"] .pz-nav-drawer__account {
+  background-color: var(--nyte-surface);
+  color: var(--nyte-text);
+  border-top-color: var(--nyte-border);
+  box-shadow: 0 0 10px rgba(0, 0, 0, .6);
+}
+html[data-nyte-theme="dark"] #js-nav-profile .pz-nav-drawer__heading,
+html[data-nyte-theme="dark"] #js-nav-profile .pz-nav-drawer__link { color: var(--nyte-text); }
+html[data-nyte-theme="dark"] #js-nav-profile .pz-nav__button,
+html[data-nyte-theme="dark"] #js-nav-profile .pz-nav__button a {
+  background-color: var(--nyte-surface-2);
+  color: var(--nyte-text);
+  border-color: var(--nyte-border);
+}
+html[data-nyte-theme="dark"] #js-nav-profile .pz-nav__button:hover,
+html[data-nyte-theme="dark"] #js-nav-profile .pz-nav__button:hover a {
+  background-color: var(--nyte-border);
+  color: #ffffff;
+}
+
+/* Icons NYT hard-codes with fill="#121212" */
+html[data-nyte-theme="dark"] .pz-game-toolbar svg [fill="#121212"],
+html[data-nyte-theme="dark"] .pz-toolbar-button svg [fill="#121212"],
+html[data-nyte-theme="dark"] .pz-nav svg [fill="#121212"] {
+  fill: var(--nyte-text);
+}

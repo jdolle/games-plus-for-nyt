@@ -1,0 +1,14 @@
+/* Spelling Bee dark theme. Inert until html[data-nyte-theme="dark"].
+   NYT's own palette (hive tiles --bg-tile-sb #38383f, centre --bg-sb #f7da21) is activated by
+   core/theme.ts via body[data-mode="dark"].display-settings-enabled; only residue lives here.
+   Never style ad slots: [data-testid="ad-top"], [data-testid="ad-bottom"], [id^="dfp-ad"], .ad */
+html[data-nyte-theme="dark"] #spelling-bee-container {
+  background-color: var(--nyte-bg);
+  color: var(--nyte-text);
+}
+html[data-nyte-theme="dark"] .hive-cell .cell-fill[stroke="white"] { stroke: var(--nyte-bg); }
+html[data-nyte-theme="dark"] .sb-wordlist-box {
+  background-color: var(--nyte-surface);
+  border-color: var(--nyte-border);
+  color: var(--nyte-text);
+}

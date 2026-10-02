@@ -1,0 +1,30 @@
+{
+  "name": "games-plus-for-nyt",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Unofficial dark mode and keyboard shortcuts for NYT Games. Not affiliated with or endorsed by The New York Times.",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "dev": "node build.mjs --watch",
+    "build": "node build.mjs",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src",
+    "check": "pnpm typecheck && pnpm lint && pnpm test && pnpm licenses:check",
+    "licenses:check": "node scripts/check-licenses.mjs",
+    "icons": "node scripts/make-icons.mjs"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/chrome": "^0.3.4",
+    "@types/node": "^26.6.3",
+    "esbuild": "^0.28.2",
+    "eslint": "^10.11.0",
+    "jsdom": "^30.1.1",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.71.0",
+    "vitest": "^5.0.3",
+    "ws": "^8.22.0"
+  }
+}

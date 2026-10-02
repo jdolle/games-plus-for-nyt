@@ -1,0 +1,214 @@
+/* Crossword dark theme. Inert until html[data-nyte-theme="dark"] (core/theme.ts).
+   NYT hard-codes the board, toolbar and clue colours (no design tokens), so everything is explicit here.
+   Cell state classes sit on the <rect>; the letter <text> is a later sibling inside g.xwd__cell.
+   Never style ad slots: [data-testid="ad-top"], [data-testid="ad-bottom"], [id^="dfp-ad"], .ad */
+
+/* Board. Role-based, colour-blind-safe palette (see README "Features" and palette.test.ts, which
+   enforces the WCAG ratios): blue = the current word, yellow = the cursor cell, amber = related cells,
+   orange = check/reveal marks, gray = neutral — no red/green, and every state also has a non-colour cue
+   (cursor: inverted black letter; related: an outline; pencil: italic; confirmed: underline; marks:
+   slash vs flag). Letters keep ≥ 4.5:1 on every fill they can sit on. */
+html[data-nyte-theme="dark"] #xwd-board .xwd__cell--cell { fill: #3a3a3c; }
+html[data-nyte-theme="dark"] #xwd-board .xwd__cell--block { fill: #000000; }
+html[data-nyte-theme="dark"] #xwd-board g.xwd__cell text { fill: #d7dadc; }
+html[data-nyte-theme="dark"] #xwd-board [stroke="black"] { stroke: #3a3a3c; }
+html[data-nyte-theme="dark"] #xwd-board [stroke="dimgray"] { stroke: #5a5a5c; }
+html[data-nyte-theme="dark"] #xwd-board .xwd__cell--shaded { fill: #56565a; }
+/* Related (cross-referenced) cells: amber fill plus an amber outline, so the state survives grayscale
+   and still shows when the cell is inside the current word (blue fill, amber outline). */
+html[data-nyte-theme="dark"] #xwd-board .xwd__cell--related {
+  fill: #665518;
+  stroke: #c9a227;
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+}
+html[data-nyte-theme="dark"] #xwd-board .xwd__cell--highlighted { fill: #2a5a80; }
+html[data-nyte-theme="dark"] #xwd-board .xwd__cell--related.xwd__cell--highlighted { fill: #2a5a80; }
+/* Selected (cursor) cell: NYT's #ffda00 is far too bright on a dark grid, so use the muted
+   dark-mode yellow from the shared palette (--nyte-yellow, #b59f3b). The cell is
+   <g class="xwd__cell" aria-selected="true|false"> with the state classes on its <rect> and the
+   letter/number <text> rendered after it, so letter colours key on the <g> (aria-selected for the
+   cursor cell, :has(> rect.state) for the others) rather than on sibling order. */
+html[data-nyte-theme="dark"] #xwd-board .xwd__cell--selected { fill: var(--nyte-yellow, #b59f3b); }
+html[data-nyte-theme="dark"] #xwd-board g.xwd__cell:has(> .xwd__cell--penciled) text,
+html[data-nyte-theme="dark"] #xwd-board g.xwd__cell:has(> .xwd__cell--penciled) tspan {
+  fill: #a8a8ac !important; /* a clear step below the #d7dadc pen letters; "Red pencil" (pencil-color.ts) overrides it */
+  font-style: italic;
+}
+html[data-nyte-theme="dark"] #xwd-board g.xwd__cell:has(> .xwd__assistance--confirmed) text,
+html[data-nyte-theme="dark"] #xwd-board g.xwd__cell:has(> .xwd__assistance--confirmed) tspan {
+  fill: #b3d4ff !important;
+  text-decoration: underline;
+}
+/* Black letter (and clue number) in the selected cell */
+html[data-nyte-theme="dark"] #xwd-board g.xwd__cell[aria-selected="true"] text,
+html[data-nyte-theme="dark"] #xwd-board g.xwd__cell[aria-selected="true"] tspan { fill: #000000 !important; }
+/* Check / reveal marks: NYT's red (#e63333) is 2.6:1 on a dark cell and turns dark brown for
+   protan vision; orange is the colour-blind-safe counterpart to the blue "confirmed" letters. The
+   marks already differ in shape (slash vs flag); the flag's white tatter is untouched. */
+html[data-nyte-theme="dark"] #xwd-board .xwd__assistance--checked .xwd__assistance--slash { stroke: #ffb347; }
+html[data-nyte-theme="dark"] #xwd-board .xwd__assistance--revealed .xwd__assistance--flag { fill: #ffb347; }
+
+/* Toolbar. Icons are black SVG background images (inverted below). NYT paints hover with a
+   *descendant* rule, `.xwd__tool--button :hover { #f4f4f4 }`, i.e. on the inner <button> and even on
+   the <i data-testid="tool-icon"> when the pointer is over it; the active/autocheck (#d9d9d9) and
+   open (#fafafa) states and the dropdown rows are hard-coded light too. So every rule here targets
+   the inner elements, not just the <li>. Hover = --nyte-surface-2, active = --nyte-border. */
+/* No distinct toolbar band: NYT hard-codes #fff here, so paint it transparent to show the page background. */
+html[data-nyte-theme="dark"] .xwd__toolbar--wrapper {
+  background-color: transparent;
+  color: var(--nyte-text);
+  border-color: var(--nyte-border);
+}
+html[data-nyte-theme="dark"] .xwd__tool--button button,
+html[data-nyte-theme="dark"] .xwd__tool--texty,
+html[data-nyte-theme="dark"] .xwd__tool--texty button,
+html[data-nyte-theme="dark"] .xwd__tool--texty button:hover { color: var(--nyte-text); }
+html[data-nyte-theme="dark"] .xwd__tool--button:hover,
+html[data-nyte-theme="dark"] .xwd__tool--button button:hover {
+  background-color: var(--nyte-surface-2);
+  color: var(--nyte-text);
+}
+/* The icon element itself also matches NYT's descendant :hover; never let it get its own box. */
+html[data-nyte-theme="dark"] i[data-testid="tool-icon"],
+html[data-nyte-theme="dark"] i[data-testid="tool-icon"]:hover {
+  background-color: transparent !important;
+  filter: invert(1);
+}
+html[data-nyte-theme="dark"] .xwd__tool--active,
+html[data-nyte-theme="dark"] .xwd__tool--autocheck,
+html[data-nyte-theme="dark"] .xwd__tool--active button,
+html[data-nyte-theme="dark"] .xwd__tool--autocheck button,
+html[data-nyte-theme="dark"] .xwd__tool--active button:hover,
+html[data-nyte-theme="dark"] .xwd__tool--autocheck button:hover {
+  background-color: var(--nyte-border);
+  color: #ffffff;
+}
+/* An "on" tool (Pencil, Autocheck) is a shape, not just a shade: a yellow bar along its bottom edge. */
+html[data-nyte-theme="dark"] .xwd__tool--active,
+html[data-nyte-theme="dark"] .xwd__tool--autocheck { box-shadow: inset 0 -3px 0 var(--nyte-yellow); }
+/* A tool whose dropdown (Reveal / Check / Autocheck) is open */
+html[data-nyte-theme="dark"] .xwd__tool--open,
+html[data-nyte-theme="dark"] .xwd__tool--open:hover,
+html[data-nyte-theme="dark"] .xwd__tool--open > button:hover {
+  background-color: var(--nyte-surface-2);
+  color: var(--nyte-text);
+}
+/* Dropdown menu: ul.xwd__menu--container > li.xwd__menu--item > button. The checked item's tick is a
+   black background image on the button; it is left alone (inverting the button would invert its text). */
+html[data-nyte-theme="dark"] .xwd__menu--container { border-color: var(--nyte-border); }
+html[data-nyte-theme="dark"] .xwd__menu--item {
+  background-color: var(--nyte-surface);
+  color: var(--nyte-text);
+  border-top-color: var(--nyte-border);
+}
+html[data-nyte-theme="dark"] .xwd__menu--item:hover {
+  background-color: var(--nyte-surface-2);
+  color: var(--nyte-text);
+}
+html[data-nyte-theme="dark"] .xwd__menu--item-disabled { color: var(--nyte-text-muted); }
+/* Timer: li.xwd__timer--button stretches across the toolbar (flex-grow), but the clickable element is
+   the 100px <button> inside it (div.timer-count + i.pz-icon-pause), so hover feedback is drawn on the
+   button only, never on the stretched <li>. The pause icon gets 4px more room from the time. */
+html[data-nyte-theme="dark"] .xwd__timer--button:hover { background-color: transparent; }
+html[data-nyte-theme="dark"] .xwd__timer--button button:hover { background-color: var(--nyte-surface-2); }
+/* The pause icon is a black SVG that NYT dims to 30% (100% on hover): invisible on a dark surface, so
+   invert it to white and rest it at 65%; NYT's own hover rule still brings it to full strength. */
+html[data-nyte-theme="dark"] .xwd__timer--button i {
+  margin-left: calc(0.5em + 4px);
+  filter: invert(1);
+  opacity: 0.65;
+}
+/* Once the puzzle is solved (or while paused / not started) NYT labels the button "Timer Play Button",
+   drops the pause icon and ignores clicks — so no hover feedback either. */
+html[data-nyte-theme="dark"] .xwd__timer--button:has(> button[aria-label="Timer Play Button"]) button:hover { background-color: transparent; }
+html[data-nyte-theme="dark"] .xwd__timer--button > button[aria-label="Timer Play Button"] { cursor: default; }
+
+/* Header tools: the "Print" button (button.xwd__printtools--button in .xwd__header--tools-container)
+   is a white pill with a black border and a black SVG icon; make it a quiet dark-gray button. */
+html[data-nyte-theme="dark"] .xwd__printtools--button {
+  background-color: var(--nyte-surface-2);
+  color: var(--nyte-text);
+  border-color: var(--nyte-border);
+}
+html[data-nyte-theme="dark"] .xwd__printtools--button:hover:not(:disabled) {
+  background-color: var(--nyte-border);
+  color: var(--nyte-text);
+}
+html[data-nyte-theme="dark"] .xwd__printtools--button .pz-icon-print-black,
+html[data-nyte-theme="dark"] .xwd__printtools--button i { filter: invert(1); }
+
+/* Clue lists: ul.xwd__clue-list--list > li (span.xwd__clue--label = number, span.xwd__clue--text).
+   Unselected clues are gray, the selected clue is white; answered clues (.xwd__clue--filled, which
+   NYT dims to 50%) stay dimmer than unselected. The selected rule comes last so a selected clue is
+   white even once it is answered. */
+html[data-nyte-theme="dark"] article#puzzle,
+html[data-nyte-theme="dark"] .xwd__clue-list--wrapper,
+html[data-nyte-theme="dark"] .xwd__clue-list--list {
+  background-color: var(--nyte-bg);
+  color: var(--nyte-text);
+}
+html[data-nyte-theme="dark"] .xwd__clue-list--title {
+  color: var(--nyte-text);
+  border-bottom-color: var(--nyte-border);
+}
+/* Each clue is li.xwd__clue--li; the active one also has .xwd__clue--selected. Keyed on those
+   classes alone (no list ancestor) with !important so NYT's own colours (e.g. the 50% dimming on
+   .xwd__clue--filled) never win. */
+html[data-nyte-theme="dark"] .xwd__clue--li,
+html[data-nyte-theme="dark"] .xwd__clue--li .xwd__clue--label,
+html[data-nyte-theme="dark"] .xwd__clue--li .xwd__clue--text { color: #9a9a9b !important; }
+html[data-nyte-theme="dark"] .xwd__clue--li.xwd__clue--filled,
+html[data-nyte-theme="dark"] .xwd__clue--li.xwd__clue--filled .xwd__clue--label,
+html[data-nyte-theme="dark"] .xwd__clue--li.xwd__clue--filled .xwd__clue--text { color: #8c8c90 !important; }
+/* Related (cross-referenced) clue: the same amber as the related cells, light text, and an amber left
+   edge — the shape cue the highlighted (crossing) clue carries in blue. */
+html[data-nyte-theme="dark"] .xwd__clue--li.xwd__clue--related {
+  background-color: #665518;
+  border-left-color: #c9a227;
+}
+html[data-nyte-theme="dark"] .xwd__clue--li.xwd__clue--related,
+html[data-nyte-theme="dark"] .xwd__clue--li.xwd__clue--related .xwd__clue--label,
+html[data-nyte-theme="dark"] .xwd__clue--li.xwd__clue--related .xwd__clue--text { color: #d7dadc !important; }
+html[data-nyte-theme="dark"] .xwd__clue--li.xwd__clue--highlighted { border-left-color: #4f7fb3; }
+html[data-nyte-theme="dark"] .xwd__clue--li.xwd__clue--selected { background-color: #2a5a80; }
+html[data-nyte-theme="dark"] .xwd__clue--li.xwd__clue--selected,
+html[data-nyte-theme="dark"] .xwd__clue--li.xwd__clue--selected .xwd__clue--label,
+html[data-nyte-theme="dark"] .xwd__clue--li.xwd__clue--selected .xwd__clue--text { color: #ffffff !important; }
+/* "Hide clues" mode paints each clue over with a flat block */
+html[data-nyte-theme="dark"] .xwd__clue-list--obscured li .xwd__clue--text {
+  background-color: var(--nyte-border);
+  color: var(--nyte-border);
+}
+/* The clue bar shows the current clue: the same "current" blue as the selected clue and the highlighted word. */
+html[data-nyte-theme="dark"] .xwd__clue-bar-desktop--bar { background-color: #2a5a80; color: var(--nyte-text); }
+
+/* Congrats modal: NYT hard-codes black text on the content column (.mini__congrats-modal--content on
+   the Mini, .xwd__congrats-modal--content on the daily and Midi) and on the home-delivery promo line.
+   The yellow streak badge keeps its own black-on-yellow rule. */
+html[data-nyte-theme="dark"] .mini__congrats-modal--content,
+html[data-nyte-theme="dark"] .xwd__congrats-modal--content,
+html[data-nyte-theme="dark"] .xwd__congrats-modal--homeDelivery_main { color: #ffffff; }
+/* The congrats screen is a full "moment": div.pz-moment.xwd__congrats-moment[data-testid="moment-wrapper"]
+   wrapping the modal body, with an inline white background (bgColor "$white") and NYT's 15px side
+   padding on .pz-moment. Paint it like the modal body and drop the side padding so nothing light
+   shows beside the modal. */
+html[data-nyte-theme="dark"] .xwd__congrats-moment,
+html[data-nyte-theme="dark"] [data-testid="moment-wrapper"].xwd__congrats-moment {
+  background-color: var(--nyte-surface) !important;
+  color: var(--nyte-text);
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+/* Modal close control ("Back to puzzle", button[data-testid="modal-close"].xwd__modal--close): NYT
+   darkens it to #363636 on hover, which disappears on a dark modal. */
+html[data-nyte-theme="dark"] [data-testid="modal-close"]:hover,
+html[data-nyte-theme="dark"] .xwd__modal--close:hover { color: #ffffff; }
+
+/* Rebus input */
+html[data-nyte-theme="dark"] #rebus-input {
+  background-color: var(--nyte-surface);
+  color: var(--nyte-text);
+  border-color: var(--nyte-border);
+}

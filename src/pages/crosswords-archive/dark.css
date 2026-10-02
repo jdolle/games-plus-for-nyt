@@ -1,0 +1,121 @@
+/* Crossword archive pages (nytimes.com/crosswords/archive/*) dark theme. Inert until html[data-nyte-theme="dark"].
+   NYT's archive app hard-codes a white date selector, #dcdcdc rules and white puzzle cards (the same
+   .island / .calendar.puzzleInfo cards as the crossword home page); its class names are a stable
+   `archive_*` family plus a few generic ones (.island, .button, .featured …) scoped under the
+   #crossword-archive-container root here. The coloured progress icons on each calendar day are kept.
+   Never style ad slots: [data-testid="ad-top"], [data-testid="ad-bottom"], [id^="dfp-ad"], .ad, .pz-ad-box */
+
+/* Page */
+html[data-nyte-theme="dark"] #crossword-archive-container,
+html[data-nyte-theme="dark"] .archive_viewer,
+html[data-nyte-theme="dark"] .archive_viewer-content { background-color: var(--nyte-bg); color: var(--nyte-text); }
+
+/* Date selector strip (month / year dropdowns, Today, view toggles) */
+html[data-nyte-theme="dark"] .archive_date-selector-container {
+  background-color: var(--nyte-surface);
+  color: var(--nyte-text);
+  border-bottom-color: var(--nyte-border);
+}
+html[data-nyte-theme="dark"] .archive_dropdown select,
+html[data-nyte-theme="dark"] #archive-month-selector,
+html[data-nyte-theme="dark"] #archive-year-selector {
+  background-color: var(--nyte-surface);
+  color: var(--nyte-text);
+  border-color: var(--nyte-border);
+}
+html[data-nyte-theme="dark"] .archive_viewer button {
+  background-color: var(--nyte-surface);
+  color: var(--nyte-text);
+  border-color: var(--nyte-border);
+}
+html[data-nyte-theme="dark"] .archive_viewer button.archive_today:hover { background-color: var(--nyte-surface-2); }
+html[data-nyte-theme="dark"] .archive_viewer button.archive_today:disabled:hover { background-color: var(--nyte-surface); }
+/* The previous / next arrows and the inactive grid / list toggles are black SVG background images on
+   the button itself, so the whole button is inverted; its background and border are chosen so that
+   their inverses are our surface (#1a1a1b) and border (#3a3a3c) tokens. The active toggle (blue with a
+   white icon) is left alone. */
+html[data-nyte-theme="dark"] .archive_viewer button.archive_next,
+html[data-nyte-theme="dark"] .archive_viewer button.archive_prev,
+html[data-nyte-theme="dark"] .archive_viewer button.archive_toggle:not(.archive_active) {
+  filter: invert(1);
+  background-color: #e5e5e4;
+  border-color: #c5c5c3;
+  color: #282827;
+}
+html[data-nyte-theme="dark"] .archive_viewer button.archive_next:hover,
+html[data-nyte-theme="dark"] .archive_viewer button.archive_prev:hover { background-color: #d8d8d6; }
+html[data-nyte-theme="dark"] .archive_viewer button.archive_next:disabled:hover,
+html[data-nyte-theme="dark"] .archive_viewer button.archive_prev:disabled:hover { background-color: #e5e5e4; }
+html[data-nyte-theme="dark"] .archive_arrow { color: var(--nyte-border); }
+
+/* Calendar and list views */
+html[data-nyte-theme="dark"] .archive_calendar-header,
+html[data-nyte-theme="dark"] .archive_list-view-header,
+html[data-nyte-theme="dark"] .archive_list-item,
+html[data-nyte-theme="dark"] .archive_mobile-list-item { border-bottom-color: var(--nyte-border); }
+html[data-nyte-theme="dark"] .archive_list-item:hover { border-color: var(--nyte-border); }
+html[data-nyte-theme="dark"] .archive_mobile-list-item .archive_title { border-right-color: var(--nyte-border); }
+html[data-nyte-theme="dark"] .archive_list-item .archive_title > a,
+html[data-nyte-theme="dark"] .archive_title,
+html[data-nyte-theme="dark"] .archive_date,
+html[data-nyte-theme="dark"] .archive_author,
+html[data-nyte-theme="dark"] .archive_empty-state,
+html[data-nyte-theme="dark"] .archive_empty-state-message { color: var(--nyte-text); }
+html[data-nyte-theme="dark"] .archive_list-item .archive_puzzle-actions a { color: #85b7ff; }
+html[data-nyte-theme="dark"] .archive_list-item .archive_puzzle-actions a:visited { color: var(--nyte-text-muted); }
+
+/* Puzzle cards (.island with a .calendar.puzzleInfo face, .button / .featured cards) */
+html[data-nyte-theme="dark"] #crossword-archive-container .island,
+html[data-nyte-theme="dark"] #crossword-archive-container .button,
+html[data-nyte-theme="dark"] #crossword-archive-container .featured {
+  background-color: var(--nyte-surface);
+  color: var(--nyte-text);
+  border-color: var(--nyte-border);
+}
+html[data-nyte-theme="dark"] #crossword-archive-container .button:hover { background-color: var(--nyte-surface-2); }
+html[data-nyte-theme="dark"] #crossword-archive-container .island:hover,
+html[data-nyte-theme="dark"] #crossword-archive-container .island:focus-within { box-shadow: 2px 2px 0 0 var(--nyte-border); }
+html[data-nyte-theme="dark"] #crossword-archive-container .island:hover .printTool,
+html[data-nyte-theme="dark"] #crossword-archive-container .island:focus-within .printTool,
+html[data-nyte-theme="dark"] #crossword-archive-container .thumb .printTool,
+html[data-nyte-theme="dark"] #crossword-archive-container .calendar.puzzleInfo .printTool {
+  background-color: var(--nyte-surface);
+  border-top-color: var(--nyte-border);
+}
+html[data-nyte-theme="dark"] #crossword-archive-container .island .printTool .divider { border-right-color: var(--nyte-border); }
+/* Print icon: a black SVG background image (NYT swaps in print-black.svg on hover) */
+html[data-nyte-theme="dark"] #crossword-archive-container .print { filter: invert(1); }
+html[data-nyte-theme="dark"] #crossword-archive-container .puzzleAction,
+html[data-nyte-theme="dark"] #crossword-archive-container .puzzleInfo .puzzleInfoContent,
+html[data-nyte-theme="dark"] #crossword-archive-container .upsell { color: var(--nyte-text); }
+html[data-nyte-theme="dark"] #crossword-archive-container .byline,
+html[data-nyte-theme="dark"] #crossword-archive-container .calendar.puzzleInfo .date,
+html[data-nyte-theme="dark"] #crossword-archive-container .featured.action-subscribe .puzzleInfoContent { color: var(--nyte-text-muted); }
+html[data-nyte-theme="dark"] #crossword-archive-container hr { background: var(--nyte-border); }
+
+/* Subscribe overlay over locked months (mini redesign): white scrim, white-fading gradient, white panel */
+html[data-nyte-theme="dark"] .archive_overlay-container { background-color: rgba(18, 18, 19, 0.8); }
+html[data-nyte-theme="dark"] .archive_overlay-gradient--mini-redesign {
+  background: linear-gradient(to bottom, rgba(18, 18, 19, 0.2) 0%, rgb(18, 18, 19) 100%);
+}
+html[data-nyte-theme="dark"] .archive_overlay-body--mini-redesign { background-color: var(--nyte-surface); color: var(--nyte-text); }
+html[data-nyte-theme="dark"] .archive_subscribe-button--mini-redesign { background-color: var(--nyte-text); color: var(--nyte-bg); }
+html[data-nyte-theme="dark"] .archive_subscribe-button--mini-redesign:active { background-color: var(--nyte-text-muted); }
+html[data-nyte-theme="dark"] .archive_subscribe-button--mini-redesign--login {
+  background-color: var(--nyte-surface);
+  color: var(--nyte-text);
+  border-color: var(--nyte-text);
+}
+html[data-nyte-theme="dark"] .archive_subscribe-button--mini-redesign--login:active { background-color: var(--nyte-surface-2); }
+
+/* Tabs (daily / mini / midi switcher on some layouts) */
+html[data-nyte-theme="dark"] .tab__tabGroup .tab__tabNav { background-color: var(--nyte-surface-2); border-color: var(--nyte-border); }
+html[data-nyte-theme="dark"] .tab__tabGroup .tab__tab { color: var(--nyte-text-muted); }
+html[data-nyte-theme="dark"] .tab__tabGroup .tab__tab > .active { background-color: var(--nyte-surface); border-color: var(--nyte-border); color: var(--nyte-text); }
+html[data-nyte-theme="dark"] .tab__tabGroup .tab__tab:hover { color: var(--nyte-text); }
+
+/* Print modal (shared with the crossword home page) */
+html[data-nyte-theme="dark"] .hub-print-modal-content .hub-print-modal-section { border-top-color: var(--nyte-border); }
+html[data-nyte-theme="dark"] .hub-print-modal-content .hub-print-modal-puzzle-details,
+html[data-nyte-theme="dark"] .hub-print-modal__title { border-bottom-color: var(--nyte-border); }
+html[data-nyte-theme="dark"] .hub-print-modal-content .hub-print-modal-subscript { color: var(--nyte-text-muted); }

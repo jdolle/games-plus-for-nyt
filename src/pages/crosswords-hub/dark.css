@@ -1,0 +1,158 @@
+/* Crossword home page (nytimes.com/crosswords) dark theme. Inert until html[data-nyte-theme="dark"].
+   NYT's hub hard-codes white cards (#fff, hover #fafafa), black text and #dcdcdc/#e6e6e6/#f4f4f4
+   borders on a #f4f4f4 page; its class names are a stable `hub-*` family plus a few generic ones
+   (.featured, .button, .island, .puzzleInfo …) that are scoped under #hub-root here. Brand accents
+   (the blue card shadow, the pink/yellow stats bars, each game's cover colour) are kept.
+   Never style ad slots: [data-testid="ad-top"], [data-testid="ad-bottom"], [id^="dfp-ad"], .ad, .pz-ad-box */
+
+/* Page and the welcome band (NYT: blue #4d88f9, or #f4f4f4 in the "more games" variant) */
+html[data-nyte-theme="dark"] #hub-root,
+html[data-nyte-theme="dark"] .pz-content,
+html[data-nyte-theme="dark"] .accordion__drawerContent { background-color: var(--nyte-bg); color: var(--nyte-text); }
+html[data-nyte-theme="dark"] .hub-welcome,
+html[data-nyte-theme="dark"] .hub-welcome-midi,
+html[data-nyte-theme="dark"] .hub-welcome-loading,
+html[data-nyte-theme="dark"] .moar-games-variant.hub-welcome { background-color: var(--nyte-surface); }
+html[data-nyte-theme="dark"] .hub-welcome-loading .hub-welcome__section { background-color: var(--nyte-surface-2); }
+html[data-nyte-theme="dark"] .hub-welcome__title,
+html[data-nyte-theme="dark"] .hub-streak-encouragement,
+html[data-nyte-theme="dark"] .hub-streak-encouragement > strong,
+html[data-nyte-theme="dark"] .hub-welcome-midi .hub-streak-encouragement,
+html[data-nyte-theme="dark"] .hub-welcome-midi .hub-streak-encouragement > strong,
+html[data-nyte-theme="dark"] .moar-games-variant .hub-welcome__title,
+html[data-nyte-theme="dark"] .hub-welcome-midi .hub-welcome__title { color: var(--nyte-text); }
+html[data-nyte-theme="dark"] .hub-wrap-message,
+html[data-nyte-theme="dark"] .moar-games-variant .hub-wrap-message { border-bottom-color: var(--nyte-border); }
+html[data-nyte-theme="dark"] .hub-welcome-midi.hub-welcome-loaded .hub-welcome__section .featured.action-subscribe::before { background-color: var(--nyte-surface); }
+
+/* Cards: today's puzzles (.featured / .button / .puzzleInfo), promos, stats, archive islands, game cards */
+html[data-nyte-theme="dark"] #hub-root .featured,
+html[data-nyte-theme="dark"] #hub-root .button,
+html[data-nyte-theme="dark"] #hub-root .island,
+html[data-nyte-theme="dark"] .hub-promo-card,
+html[data-nyte-theme="dark"] .hub-stats-card__puzzle-info,
+html[data-nyte-theme="dark"] .hub-game-card,
+html[data-nyte-theme="dark"] .hub-guide-promo-card-content,
+html[data-nyte-theme="dark"] .hub-mobile-stats__container,
+html[data-nyte-theme="dark"] .accordion__drawerTitle {
+  background-color: var(--nyte-surface);
+  color: var(--nyte-text);
+  border-color: var(--nyte-border);
+}
+html[data-nyte-theme="dark"] .hub-welcome-midi .featured,
+html[data-nyte-theme="dark"] .moar-games-variant .featured,
+html[data-nyte-theme="dark"] .hub-guide-promo-card { border-color: var(--nyte-border); }
+html[data-nyte-theme="dark"] #hub-root .button:hover,
+html[data-nyte-theme="dark"] .hub-promo-card:hover,
+html[data-nyte-theme="dark"] .hub-stats-card__puzzle-info:hover,
+html[data-nyte-theme="dark"] .hub-game-card:hover .hub-game-card__button,
+html[data-nyte-theme="dark"] .hub-game-card.hub-dual-link:hover .hub-game-card__button,
+html[data-nyte-theme="dark"] .hub-game-card.hub-dual-link .hub-game-card__button:hover,
+html[data-nyte-theme="dark"] .progress__playMoreLink:hover,
+html[data-nyte-theme="dark"] .hub-puzzle-group__more-link a:hover,
+html[data-nyte-theme="dark"] .accordion__drawerTitle:active { background-color: var(--nyte-surface-2); }
+html[data-nyte-theme="dark"] .hub-game-card:hover,
+html[data-nyte-theme="dark"] .hub-guide-promo-card:hover,
+html[data-nyte-theme="dark"] #hub-root .island:hover,
+html[data-nyte-theme="dark"] #hub-root .island:focus-within { box-shadow: 2px 2px 0 0 var(--nyte-border); }
+html[data-nyte-theme="dark"] #hub-root .island:hover .printTool,
+html[data-nyte-theme="dark"] #hub-root .island:focus-within .printTool,
+html[data-nyte-theme="dark"] #hub-root .thumb .printTool,
+html[data-nyte-theme="dark"] #hub-root .calendar.puzzleInfo .printTool {
+  background-color: var(--nyte-surface);
+  border-top-color: var(--nyte-border);
+}
+html[data-nyte-theme="dark"] #hub-root .island .printTool .divider { border-right-color: var(--nyte-border); }
+
+/* Text on the cards */
+html[data-nyte-theme="dark"] #hub-root .puzzleAction,
+html[data-nyte-theme="dark"] #hub-root .puzzleInfo .puzzleInfoContent,
+html[data-nyte-theme="dark"] #hub-root .upsell,
+html[data-nyte-theme="dark"] .hub-welcome-midi .featured.standard.action-subscribe .puzzleInfoContent,
+html[data-nyte-theme="dark"] .hub-stats-card__puzzle-info-content,
+html[data-nyte-theme="dark"] .hub-stats-card__more-stats,
+html[data-nyte-theme="dark"] .hub-stats-card__time,
+html[data-nyte-theme="dark"] .hub-mobile-stats__time,
+html[data-nyte-theme="dark"] .hub-mobile-stats__stats-more,
+html[data-nyte-theme="dark"] .hub-game-card__name,
+html[data-nyte-theme="dark"] .hub-game-card__button,
+html[data-nyte-theme="dark"] .hub-guide-promo-card-content h2,
+html[data-nyte-theme="dark"] .hub-guide-promo-card-content .hub-guide-promo-card-title,
+html[data-nyte-theme="dark"] .progress__playMoreLink,
+html[data-nyte-theme="dark"] .hub-puzzle-group__more-link a,
+html[data-nyte-theme="dark"] .tab__tabGroup .tab__tab > .active,
+html[data-nyte-theme="dark"] .tab__tabGroup .tab__tab:hover,
+html[data-nyte-theme="dark"] .moar-games-variant .hub-wordplay-link,
+html[data-nyte-theme="dark"] .hub-welcome-midi .hub-wordplay-link,
+html[data-nyte-theme="dark"] [class*="CollectionFam-module_label"],
+html[data-nyte-theme="dark"] [class*="CollectionFam-module_title"],
+html[data-nyte-theme="dark"] [class*="ExpansionButton-module_ExpansionButton"] { color: var(--nyte-text); }
+html[data-nyte-theme="dark"] #hub-root .byline,
+html[data-nyte-theme="dark"] #hub-root .calendar.puzzleInfo .date,
+html[data-nyte-theme="dark"] #hub-root .featured.action-subscribe .puzzleInfoContent,
+html[data-nyte-theme="dark"] .hub-promo-card__description,
+html[data-nyte-theme="dark"] .hub-game-card__description,
+html[data-nyte-theme="dark"] .hub-stats-card__streak-type,
+html[data-nyte-theme="dark"] .hub-stats-card__no-stats,
+html[data-nyte-theme="dark"] .hub-guide-promo-card-content,
+html[data-nyte-theme="dark"] .progress__noProgress,
+html[data-nyte-theme="dark"] .tab__tabGroup .tab__tab,
+html[data-nyte-theme="dark"] .hub-sponsored-card__supported-by,
+html[data-nyte-theme="dark"] .hub-print-modal-content .hub-print-modal-subscript,
+html[data-nyte-theme="dark"] [class*="CollectionFam-module_description"] { color: var(--nyte-text-muted); }
+
+/* Dividers and borders */
+html[data-nyte-theme="dark"] #hub-root hr { background: var(--nyte-border); }
+html[data-nyte-theme="dark"] .hub-stats-card__title,
+html[data-nyte-theme="dark"] .hub-stats-card__streak-title,
+html[data-nyte-theme="dark"] .hub-mobile-stats__stats-chart-label,
+html[data-nyte-theme="dark"] .hub-mobile-stats__stats-bars-block,
+html[data-nyte-theme="dark"] .hub-mobile-stats__bars-block,
+html[data-nyte-theme="dark"] .hub-print-modal-content .hub-print-modal-puzzle-details,
+html[data-nyte-theme="dark"] .hub-print-modal__title { border-bottom-color: var(--nyte-border); }
+html[data-nyte-theme="dark"] .hub-stats-card__streak-block,
+html[data-nyte-theme="dark"] .hub-stats-card__more-stats,
+html[data-nyte-theme="dark"] .hub-sponsored-card__supported-by,
+html[data-nyte-theme="dark"] .hub-print-modal-content .hub-print-modal-section { border-top-color: var(--nyte-border); }
+html[data-nyte-theme="dark"] .hub-stats-card__streak-info:first-child { border-right-color: var(--nyte-border); }
+html[data-nyte-theme="dark"] .hub-mobile-stats__no-stats,
+html[data-nyte-theme="dark"] .hub-mobile-stats__stats-more,
+html[data-nyte-theme="dark"] #hub-root .icon,
+html[data-nyte-theme="dark"] #hub-root .loadingText { background-color: var(--nyte-surface-2); }
+html[data-nyte-theme="dark"] .hub-mobile-stats__bars-block .grey,
+html[data-nyte-theme="dark"] .hub-mobile-stats__stats-bars-grey--xshort,
+html[data-nyte-theme="dark"] .hub-mobile-stats__stats-bars-grey--short { background-color: var(--nyte-border); }
+html[data-nyte-theme="dark"] .hub-mobile-stats__bars-block .grey:nth-child(1),
+html[data-nyte-theme="dark"] .hub-mobile-stats__bars-block .grey:nth-child(2) { border-right-color: var(--nyte-surface); }
+html[data-nyte-theme="dark"] .tab__tabGroup .tab__tabNav { background-color: var(--nyte-surface-2); border-color: var(--nyte-border); }
+html[data-nyte-theme="dark"] .tab__tabGroup .tab__tab > .active { background-color: var(--nyte-surface); border-color: var(--nyte-border); }
+html[data-nyte-theme="dark"] .accordion__drawerTitle::after { color: var(--nyte-text-muted); }
+
+/* Buttons: NYT's white secondary buttons and "more games" pill links */
+html[data-nyte-theme="dark"] #hub-root button.button-secondary,
+html[data-nyte-theme="dark"] #hub-root button.button-card-secondary,
+html[data-nyte-theme="dark"] #hub-root button.button-dark-mode-support,
+html[data-nyte-theme="dark"] #hub-root button.button-secondary:disabled,
+html[data-nyte-theme="dark"] #hub-root button.button-card-secondary:disabled,
+html[data-nyte-theme="dark"] #hub-root button.button-dark-mode-support:disabled,
+html[data-nyte-theme="dark"] .moar-games-variant .hub-wordplay-link,
+html[data-nyte-theme="dark"] .hub-welcome-midi .hub-wordplay-link {
+  background-color: var(--nyte-surface);
+  color: var(--nyte-text);
+  border-color: var(--nyte-border);
+}
+html[data-nyte-theme="dark"] #hub-root button.button-secondary:hover:enabled,
+html[data-nyte-theme="dark"] #hub-root button.button-card-secondary:hover:enabled,
+html[data-nyte-theme="dark"] #hub-root button.button-dark-mode-support:hover:enabled,
+html[data-nyte-theme="dark"] #hub-root button.button-secondary:active,
+html[data-nyte-theme="dark"] #hub-root button.button-card-secondary:active,
+html[data-nyte-theme="dark"] #hub-root button.button-dark-mode-support:active,
+html[data-nyte-theme="dark"] .moar-games-variant .hub-wordplay-link:hover {
+  background-color: var(--nyte-surface-2);
+  color: var(--nyte-text);
+}
+/* Collection card CTA: NYT's black pill with light text would vanish on a dark card; flip it. */
+html[data-nyte-theme="dark"] [class*="CollectionFam-module_cta"] { background-color: var(--nyte-text); color: var(--nyte-bg); border-color: var(--nyte-text); }
+/* Bonus-puzzles card: NYT's pale yellow #fdf3c3 → the muted dark yellow used for the crossword's related cells */
+html[data-nyte-theme="dark"] [class*="BonusPuzzlesCard-module_container"] { background-color: #4a4322; border-color: var(--nyte-border); }
+html[data-nyte-theme="dark"] [class*="BonusPuzzlesCard-module_description"] { color: var(--nyte-text); }
