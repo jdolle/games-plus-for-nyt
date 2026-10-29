@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Games Plus for NYT",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Unofficial dark mode and keyboard shortcuts for NYT Games. Not affiliated with or endorsed by The New York Times.",
   "minimum_chrome_version": "120",
   "icons": {
