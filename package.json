@@ -1,6 +1,6 @@
 {
   "name": "games-plus-for-nyt",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "description": "Unofficial dark mode and keyboard shortcuts for NYT Games. Not affiliated with or endorsed by The New York Times.",
   "license": "MIT",
