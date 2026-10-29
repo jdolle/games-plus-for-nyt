@@ -1,6 +1,7 @@
 # Pushing a tag v<version> (the version in manifest.json) builds the extension, attaches the zip to a
-# GitHub Release and uploads it to the Chrome Web Store, where it is submitted for review
-# (scripts/publish-chrome.mjs). Setup and the release routine: docs/RELEASING.md.
+# GitHub Release (created here, or the one already made for the tag from the Releases page) and
+# uploads it to the Chrome Web Store, where it is submitted for review (scripts/publish-chrome.mjs).
+# Setup and the release routine: docs/RELEASING.md.
 name: Release
 
 on:
@@ -36,10 +37,12 @@ jobs:
           echo "version=$version" >> "$GITHUB_OUTPUT"
           echo "zip=games-plus-for-nyt-$version.zip" >> "$GITHUB_OUTPUT"
       - run: pnpm build
+      # The variable must not be called ZIP (or ZIPOPT): Info-ZIP's zip reads both from the environment
+      # as extra command-line options, which once made "$ZIP" the archive name and wrote it inside dist/.
       - name: Zip the build (manifest.json at the root of the archive)
         env:
-          ZIP: ${{ steps.version.outputs.zip }}
-        run: cd dist && zip -r "../$ZIP" .
+          ARCHIVE: ${{ steps.version.outputs.zip }}
+        run: cd dist && zip -r "../$ARCHIVE" .
       - uses: actions/upload-artifact@v7
         with:
           name: extension-zip
@@ -55,13 +58,18 @@ jobs:
       - uses: actions/download-artifact@v8
         with:
           name: extension-zip
-      - name: Create the GitHub Release with the zip attached
+      - name: Create the GitHub Release with the zip attached (or attach it to the tag's existing release)
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
-          ZIP: ${{ needs.build.outputs.zip }}
+          ARCHIVE: ${{ needs.build.outputs.zip }}
           VERSION: ${{ needs.build.outputs.version }}
-        run: gh release create "$GITHUB_REF_NAME" "$ZIP" --title "Games Plus for NYT v$VERSION" --generate-notes
+        run: |
+          if gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
+            gh release upload "$GITHUB_REF_NAME" "$ARCHIVE" --clobber
+          else
+            gh release create "$GITHUB_REF_NAME" "$ARCHIVE" --title "Games Plus for NYT v$VERSION" --generate-notes
+          fi
 
   chrome-web-store:
     needs: build
@@ -79,5 +87,5 @@ jobs:
           CWS_SERVICE_ACCOUNT_KEY: ${{ secrets.CWS_SERVICE_ACCOUNT_KEY }}
           CWS_PUBLISHER_ID: ${{ vars.CWS_PUBLISHER_ID }}
           CWS_EXTENSION_ID: ${{ vars.CWS_EXTENSION_ID }}
-          ZIP: ${{ needs.build.outputs.zip }}
-        run: node scripts/publish-chrome.mjs "$ZIP"
+          ARCHIVE: ${{ needs.build.outputs.zip }}
+        run: node scripts/publish-chrome.mjs "$ARCHIVE"

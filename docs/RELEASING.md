@@ -76,11 +76,15 @@ writing anything, and it clears by itself after a while.
    git tag v0.2.0 && git push origin main v0.2.0
    ```
 
+   Creating the release from GitHub's *Releases* page with a new tag `v0.2.0` does the same:
+   publishing it pushes the tag, and the workflow then attaches the zip to that release.
+
 The workflow runs three jobs:
 
 - **build** checks that the tag matches the manifest version, runs `pnpm check` and `pnpm build`,
   and zips `dist/`.
-- **github-release** creates the GitHub Release for the tag, with the zip attached and generated notes.
+- **github-release** creates the GitHub Release for the tag, with the zip attached and generated notes,
+  or attaches the zip to the release if one already exists for the tag.
 - **chrome-web-store** uploads the zip and submits it for review (`scripts/publish-chrome.mjs`). The
   log shows the upload state and the submission state (normally `PENDING_REVIEW`); the review
   itself happens on Google's side and the dashboard emails the result. At any time,
@@ -91,6 +95,9 @@ The workflow runs three jobs:
 
 - **The tag does not match the manifest version:** nothing is released. Delete the tag
   (`git tag -d v0.2.0 && git push origin :v0.2.0`), fix the version, commit, tag again.
+- **The build job fails** (check, build or zip): nothing is released. Fix the cause on `main`, then
+  move the tag to the fixed commit (`git tag -f v0.2.0 && git push -f origin v0.2.0`), which runs the
+  workflow again; a release that already exists for the tag keeps its notes and receives the zip.
 - **Authentication error:** check the secret and the two variables, and that the service account is
   listed under *Account* in the dashboard; re-run the failed job from the Actions page.
 - **The upload succeeded but the submission failed:** submit the uploaded draft from the dashboard
