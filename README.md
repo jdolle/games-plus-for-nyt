@@ -9,10 +9,8 @@ The Midi, Connections, Spelling Bee and Wordle — with dark mode, fullscreen an
 
 ## Install
 
-Not yet on the Chrome Web Store. To try it, download the zip from the latest
-[GitHub Release](https://github.com/jdolle/games-plus-for-nyt/releases), unzip it and load the folder as
-an unpacked extension (`chrome://extensions` → *Developer mode* → *Load unpacked*), or build it
-yourself — see [docs/CONTRIBUTING.md](docs/CONTRIBUTING.md).
+Available through the Chrome Web Store. Alternatively, build it yourself — see
+[docs/CONTRIBUTING.md](docs/CONTRIBUTING.md).
 
 ## Features
 
